@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Output files
+outputs/
+*.html
+!templates/*.html
+
+# Scratch / debug
+scratch/
+
+# Archives
+*.zip
+*.tar.gz
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini

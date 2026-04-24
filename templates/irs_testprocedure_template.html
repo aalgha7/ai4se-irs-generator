@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ test_procedure.document.title }}{% if test_procedure.document.subtitle %} - {{
+    test_procedure.document.subtitle }}{% endif %}</title>
+
+  <style>
+    :root {
+      --primary-color: #2f4358;
+      --secondary-color: #31465c;
+      --accent-color: #4aa3df;
+      --text-color: #222;
+      --bg-color: #f4f5f7;
+      --paper-color: #ffffff;
+      --border-color: #d9dde2;
+      --muted-color: #6c7a89;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .document-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--paper-color);
+      padding: 56px 60px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      border-radius: 4px;
+    }
+
+    header {
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 18px;
+      margin-bottom: 36px;
+      text-align: center;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      font-size: 2rem;
+      margin: 0 0 8px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: var(--muted-color);
+      margin: 0;
+    }
+
+    h2 {
+      color: var(--secondary-color);
+      border-left: 4px solid var(--accent-color);
+      padding-left: 12px;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      font-size: 1.4rem;
+    }
+
+    h3 {
+      color: var(--secondary-color);
+      font-size: 1.1rem;
+      margin-top: 22px;
+      margin-bottom: 10px;
+    }
+
+    h4 {
+      color: var(--secondary-color);
+      font-size: 1rem;
+      margin-top: 18px;
+      margin-bottom: 8px;
+    }
+
+    p {
+      margin: 10px 0 0 0;
+    }
+
+    .meta-table,
+    .std-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+      font-size: 0.95rem;
+    
+      table-layout: fixed;}
+
+    .meta-table th,
+    .meta-table td,
+    .std-table th,
+    .std-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      word-wrap: break-word;
+    }
+
+    .meta-table th {
+      background-color: #3a4b5c;
+      color: white;
+      width: 30%;
+    }
+
+    .std-table th {
+      background-color: #eef2f5;
+      color: var(--secondary-color);
+    }
+
+    .proc-id {
+      font-family: "Courier New", Courier, monospace;
+      font-weight: bold;
+      color: var(--accent-color);
+      word-break: break-word;
+    }
+
+    .procedure-block {
+      margin-top: 30px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-color);
+      /* removed page-break-inside to fix empty pages */
+    }
+
+    .step-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0 20px 0;
+      font-size: 0.93rem;
+    
+      table-layout: fixed;}
+
+    .step-table th,
+    .step-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .step-table th {
+      background-color: #eef2f5;
+      color: var(--secondary-color);
+    }
+
+    .step-number {
+      width: 8%;
+      word-break: break-word;
+      font-weight: bold;
+    }
+
+    .note-box {
+      border-left: 4px solid var(--accent-color);
+      background: #f8fbfd;
+      padding: 12px 15px;
+      margin: 12px 0 18px 0;
+    }
+
+    .placeholder {
+      color: var(--muted-color);
+      font-style: italic;
+    }
+
+    .distribution-stmt {
+      text-align: center;
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin: 15px 0 30px 0;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      background: #fefefe;
+    }
+
+    .def-table td:first-child {
+      font-weight: bold;
+      word-break: break-word;
+      width: 20%;
+    }
+
+    .footer {
+      margin-top: 56px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      color: #7f8c8d;
+      text-align: center;
+    }
+
+    .signature-block {
+      margin-top: 48px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .sig-line {
+      border-top: 1px solid #333;
+      width: 45%;
+      padding-top: 5px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      .document-container {
+        box-shadow: none;
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="document-container">
+
+    <!-- HEADER -->
+    <header>
+      <h1>{{ test_procedure.document.title }}</h1>
+      {% if test_procedure.document.subtitle %}
+      <p class="subtitle">{{ test_procedure.document.subtitle }}</p>
+      {% endif %}
+    </header>
+
+    <!-- DOCUMENT CONTROL -->
+    <section>
+      <h3>Document Control</h3>
+      <table class="meta-table">
+        <tr>
+          <th>Document ID</th>
+          <td>{{ test_procedure.document.document_control.document_id }}</td>
+        </tr>
+        <tr>
+          <th>Version</th>
+          <td>{{ test_procedure.document.document_control.version }}</td>
+        </tr>
+        <tr>
+          <th>Date</th>
+          <td>{{ test_procedure.document.document_control.date }}</td>
+        </tr>
+        <tr>
+          <th>Program</th>
+          <td>{{ test_procedure.document.document_control.program }}</td>
+        </tr>
+        <tr>
+          <th>Prepared by</th>
+          <td>{{ test_procedure.document.document_control.prepared_by }}</td>
+        </tr>
+        <tr>
+          <th>Approval Authority</th>
+          <td>{{ test_procedure.document.document_control.approval_authority }}</td>
+        </tr>
+      </table>
+
+      <!-- REVISION HISTORY -->
+      <h4>Revision History</h4>
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>Version</th>
+            <th>Date</th>
+            <th>Author</th>
+            <th>Changes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if test_procedure.document.document_control.revision_history and
+          (test_procedure.document.document_control.revision_history|length > 0) %}
+          {% for rev in test_procedure.document.document_control.revision_history %}
+          <tr>
+            <td>{{ rev.version }}</td>
+            <td>{{ rev.date }}</td>
+            <td>{{ rev.author }}</td>
+            <td>{{ rev.changes }}</td>
+          </tr>
+          {% endfor %}
+          {% else %}
+          <tr>
+            <td>{{ test_procedure.document.document_control.version }}</td>
+            <td>{{ test_procedure.document.document_control.date }}</td>
+            <td>{{ test_procedure.document.document_control.prepared_by }}</td>
+            <td>Initial release</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- DISTRIBUTION STATEMENT -->
+    <div class="distribution-stmt">
+      {{ test_procedure.document.document_control.distribution_statement if
+      test_procedure.document.document_control.distribution_statement else "Distribution Statement A: Approved for
+      public release; distribution is unlimited." }}
+    </div>
+
+    <!-- 1. INTRODUCTION -->
+    <section>
+      <h2>1. Introduction</h2>
+      <h3>1.1 Purpose</h3>
+      <p>{{ test_procedure.introduction.purpose }}</p>
+
+      <h3>1.2 Scope</h3>
+      <p>{{ test_procedure.introduction.scope }}</p>
+    </section>
+
+    <!-- 2. REFERENCED DOCUMENTS -->
+    <section>
+      <h2>2. Referenced Documents</h2>
+      <p>The following documents are referenced herein and form a part of this test procedure to the extent specified.
+      </p>
+
+      {% if test_procedure.referenced_documents and (test_procedure.referenced_documents|length > 0) %}
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th width="25%">Document ID</th>
+            <th>Title</th>
+            <th width="12%">Version</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for doc in test_procedure.referenced_documents %}
+          <tr>
+            <td class="proc-id">{{ doc.document_id }}</td>
+            <td>{{ doc.title }}</td>
+            <td>{{ doc.version if doc.version else "—" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% elif test_procedure.references and (test_procedure.references|length > 0) %}
+      <ul>
+        {% for ref in test_procedure.references %}
+        <li>{{ ref }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="placeholder">TBD</p>
+      {% endif %}
+    </section>
+
+    <!-- 3. DEFINITIONS, ACRONYMS, AND ABBREVIATIONS -->
+    <section>
+      <h2>3. Definitions, Acronyms, and Abbreviations</h2>
+
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th width="25%">Term / Acronym</th>
+            <th>Definition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>IRS</strong></td>
+            <td>Interface Requirements Specification — a document defining interface requirements between systems or
+              system elements.</td>
+          </tr>
+          <tr>
+            <td><strong>RVTM</strong></td>
+            <td>Requirements Verification Traceability Matrix — a matrix linking requirements to their planned
+              verification activities and results.</td>
+          </tr>
+          <tr>
+            <td><strong>SUT</strong></td>
+            <td>System Under Test — the system or system element being evaluated during testing.</td>
+          </tr>
+          <tr>
+            <td><strong>TAID</strong></td>
+            <td>Test, Analysis, Inspection, Demonstration — the four standard verification methods used to confirm
+              requirement compliance.</td>
+          </tr>
+          <tr>
+            <td><strong>TBD</strong></td>
+            <td>To Be Determined — content that has not yet been defined.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 4. GENERAL TEST CONDITIONS -->
+    <section>
+      <h2>4. General Test Conditions</h2>
+
+      <table class="std-table">
+        <tr>
+          <th width="28%">Test Environment</th>
+          <td>{{ test_procedure.general_conditions.test_environment if
+            test_procedure.general_conditions.test_environment else "TBD" }}</td>
+        </tr>
+        <tr>
+          <th>Required Equipment / Tools</th>
+          <td>{{ test_procedure.general_conditions.equipment if test_procedure.general_conditions.equipment else "TBD"
+            }}</td>
+        </tr>
+        <tr>
+          <th>Initial System Configuration</th>
+          <td>{{ test_procedure.general_conditions.initial_configuration if
+            test_procedure.general_conditions.initial_configuration else "TBD" }}</td>
+        </tr>
+        <tr>
+          <th>Assumptions / Constraints</th>
+          <td>{{ test_procedure.general_conditions.assumptions if test_procedure.general_conditions.assumptions else
+            "TBD" }}</td>
+        </tr>
+      </table>
+
+      <div class="note-box">
+        Detailed equipment models, bench configurations, and organization-specific tooling may be tailored by the user
+        where required.
+      </div>
+
+      <!-- 4.1 SECURITY CONSIDERATIONS -->
+      <h3>4.1 Security Considerations</h3>
+      <p>
+        {% if test_procedure.general_conditions.security_considerations %}
+        {{ test_procedure.general_conditions.security_considerations }}
+        {% else %}
+        <span class="placeholder">TBD: Security measures, handling requirements for classified or controlled
+          unclassified information (CUI), and cybersecurity considerations applicable during test execution will be
+          defined prior to testing.</span>
+        {% endif %}
+      </p>
+
+      <!-- 4.2 CONFIGURATION MANAGEMENT -->
+      <h3>4.2 Configuration Management</h3>
+      <p>
+        {% if test_procedure.general_conditions.configuration_management %}
+        {{ test_procedure.general_conditions.configuration_management }}
+        {% else %}
+        <span class="placeholder">TBD: Configuration identification and control procedures for the System Under Test
+          (SUT) will be established prior to test execution. This includes documentation of software build identifiers,
+          hardware serial numbers, firmware versions, and test environment baselines.</span>
+        {% endif %}
+      </p>
+    </section>
+
+    <!-- 5. TEST PROCEDURES -->
+    <section>
+      <h2>5. Test Procedures</h2>
+
+      {% if test_procedure.procedures and (test_procedure.procedures|length > 0) %}
+      {% for proc in test_procedure.procedures %}
+      <div class="procedure-block">
+        <h3>5.{{ loop.index }} {{ proc.title }}</h3>
+
+        <table class="std-table">
+          <tr>
+            <th width="25%">Procedure ID</th>
+            <td class="proc-id">{{ proc.procedure_id }}</td>
+          </tr>
+          <tr>
+            <th>Linked Requirement ID(s)</th>
+            <td class="proc-id">
+              {% if proc.requirement_ids is defined and proc.requirement_ids is iterable and proc.requirement_ids is not
+              string %}
+              {% for rid in proc.requirement_ids %}
+              {{ rid }}{% if not loop.last %}, {% endif %}
+              {% endfor %}
+              {% elif proc.requirement_id is defined %}
+              {{ proc.requirement_id }}
+              {% else %}
+              TBD
+              {% endif %}
+            </td>
+          </tr>
+          <tr>
+            <th>Objective</th>
+            <td>{{ proc.objective }}</td>
+          </tr>
+          <tr>
+            <th>Verification Method</th>
+            <td>{{ proc.verification_method if proc.verification_method else "TBD" }}</td>
+          </tr>
+          <tr>
+            <th>Preconditions</th>
+            <td>{{ proc.preconditions if proc.preconditions else "TBD" }}</td>
+          </tr>
+          <tr>
+            <th>Pass / Fail Criteria</th>
+            <td>{{ proc.pass_fail_criteria if proc.pass_fail_criteria else "TBD" }}</td>
+          </tr>
+        </table>
+
+        <h4>Procedure Steps</h4>
+        <table class="step-table">
+          <thead>
+            <tr>
+              <th class="step-number">Step</th>
+              <th>Action</th>
+              <th>Expected Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% if proc.steps and (proc.steps|length > 0) %}
+            {% for step in proc.steps %}
+            <tr>
+              <td class="step-number">{{ step.step_number }}</td>
+              <td>{{ step.action }}</td>
+              <td>{{ step.expected_result }}</td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+              <td class="step-number">1</td>
+              <td>TBD</td>
+              <td>TBD</td>
+            </tr>
+            {% endif %}
+          </tbody>
+        </table>
+
+        <h4>Data Collection / Evidence</h4>
+        <p>{{ proc.evidence if proc.evidence else "TBD" }}</p>
+
+        <h4>Notes</h4>
+        <p>{{ proc.notes if proc.notes else "" }}</p>
+      </div>
+      {% endfor %}
+      {% else %}
+      <p class="placeholder">TBD</p>
+      {% endif %}
+    </section>
+
+    <!-- 6. TRACEABILITY -->
+    <section>
+      <h2>6. Traceability</h2>
+
+      <!-- 6.1 VERIFICATION METHOD DEFINITIONS -->
+      <h3>6.1 Verification Method Definitions</h3>
+      <p>The following verification methods, consistent with standard systems engineering practice (INCOSE SE Handbook;
+        ISO/IEC/IEEE 15288), are referenced throughout this document and the traceability table below.</p>
+
+      <table class="std-table def-table">
+        <thead>
+          <tr>
+            <th width="20%">Method</th>
+            <th>Definition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Test (T)</td>
+            <td>Operation of the system or component under controlled conditions to verify performance against specified
+              requirements. Inputs are provided and outputs are recorded and evaluated against predicted or expected
+              results.</td>
+          </tr>
+          <tr>
+            <td>Analysis (A)</td>
+            <td>Use of mathematical modeling, simulation, statistical evaluation, or other technical assessment methods
+              to verify compliance with requirements where physical testing alone is impractical or insufficient.</td>
+          </tr>
+          <tr>
+            <td>Inspection (I)</td>
+            <td>Visual examination or review of documentation, design artifacts, or physical hardware to verify
+              conformance with specified requirements without operating the system.</td>
+          </tr>
+          <tr>
+            <td>Demonstration (D)</td>
+            <td>Operation of the system to show qualitatively that a required capability exists. Demonstration relies on
+              observable functional performance rather than detailed quantitative measurement.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 6.2 PROCEDURE-TO-REQUIREMENT TRACEABILITY -->
+      <h3>6.2 Procedure-to-Requirement Traceability</h3>
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>Requirement ID</th>
+            <th>Procedure ID</th>
+            <th>Verification Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if test_procedure.traceability and (test_procedure.traceability|length > 0) %}
+          {% for row in test_procedure.traceability %}
+          <tr>
+            <td class="proc-id">{{ row.requirement_id }}</td>
+            <td class="proc-id">{{ row.procedure_id }}</td>
+            <td>{{ row.verification_method }}</td>
+          </tr>
+          {% endfor %}
+          {% else %}
+          <tr>
+            <td class="proc-id">TBD</td>
+            <td class="proc-id">TBD</td>
+            <td>TBD</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 7. DEFECT / NON-CONFORMANCE MANAGEMENT -->
+    <section>
+      <h2>7. Defect / Non-Conformance Management</h2>
+
+      <p>
+        {% if test_procedure.defect_management and test_procedure.defect_management.process %}
+        {{ test_procedure.defect_management.process }}
+        {% else %}
+        <span class="placeholder">TBD: Any test failures, anomalies, or deviations from expected results encountered
+          during procedure execution shall be documented, categorized by severity, and reported to the test lead. The
+          defect record shall include the procedure step at which the failure occurred, observed versus expected
+          behavior, and any relevant data captures or logs.</span>
+        {% endif %}
+      </p>
+    </section>
+
+    <!-- 8. NOTES AND CONSTRAINTS -->
+    <section>
+      <h2>8. Notes and Constraints</h2>
+      <ol>
+        {% if test_procedure.notes_and_constraints and (test_procedure.notes_and_constraints|length > 0) %}
+        {% for n in test_procedure.notes_and_constraints %}
+        <li><strong>{{ n.title }}:</strong> {{ n.description }}</li>
+        {% endfor %}
+        {% else %}
+        <li><strong>TBD:</strong> TBD</li>
+        {% endif %}
+      </ol>
+    </section>
+
+    <!-- SIGNATURES / APPROVALS -->
+    <section class="signature-block">
+      {% if test_procedure.approvals and test_procedure.approvals.signatories %}
+      {% for s in test_procedure.approvals.signatories %}
+      <div class="sig-line">
+        {{ s.role }}<br />
+        __________________<br />
+        Date: __________
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="sig-line">
+        Test Lead<br />
+        __________________<br />
+        Date: __________
+      </div>
+      <div class="sig-line">
+        Systems Engineering Lead<br />
+        __________________<br />
+        Date: __________
+      </div>
+      {% endif %}
+    </section>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <p>{{ test_procedure.footer.text }}</p>
+    </div>
+
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ test_plan.document.title }}{% if test_plan.document.subtitle %} - {{ test_plan.document.subtitle }}{% endif
+    %}</title>
+
+  <style>
+    :root {
+      --primary-color: #2c3e50;
+      --secondary-color: #34495e;
+      --accent-color: #3498db;
+      --text-color: #333;
+      --bg-color: #f4f7f6;
+      --paper-color: #ffffff;
+      --border-color: #ddd;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .document-container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: var(--paper-color);
+      padding: 60px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+    }
+
+    header {
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 20px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    h2 {
+      color: var(--secondary-color);
+      border-left: 5px solid var(--accent-color);
+      padding-left: 15px;
+      margin-top: 40px;
+      font-size: 1.5rem;
+    }
+
+    h3 {
+      color: var(--secondary-color);
+      font-size: 1.2rem;
+      margin-top: 25px;
+    }
+
+    h4 {
+      color: var(--secondary-color);
+      font-size: 1.05rem;
+      margin-top: 20px;
+    }
+
+    p,
+    li {
+      font-size: 0.98rem;
+    }
+
+    .meta-table,
+    .std-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 0.92rem;
+      page-break-inside: auto;
+    }
+
+    .meta-table th,
+    .meta-table td,
+    .std-table th,
+    .std-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+      word-wrap: break-word;
+    }
+
+    .meta-table th {
+      background-color: var(--primary-color);
+      color: white;
+      width: 30%;
+    }
+
+    .std-table th {
+      background-color: #ecf0f1;
+      color: var(--secondary-color);
+    }
+
+    .std-table tr {
+      page-break-inside: avoid;
+      page-break-after: auto;
+    }
+
+    .id-cell {
+      font-family: 'Courier New', Courier, monospace;
+      font-weight: bold;
+      color: var(--accent-color);
+      white-space: nowrap;
+    }
+
+    .footer {
+      margin-top: 60px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      color: #7f8c8d;
+      text-align: center;
+    }
+
+    .signature-block {
+      margin-top: 50px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .sig-line {
+      border-top: 1px solid #333;
+      width: 45%;
+      padding-top: 5px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    .placeholder {
+      color: #7f8c8d;
+      font-style: italic;
+    }
+
+    .note-box {
+      border-left: 4px solid var(--accent-color);
+      background: #f8fbfd;
+      padding: 12px 15px;
+      margin: 15px 0;
+    }
+
+    .distribution-stmt {
+      text-align: center;
+      font-weight: bold;
+      font-size: 0.95rem;
+      margin: 15px 0 30px 0;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      background: #fefefe;
+    }
+
+    .def-table td:first-child {
+      font-weight: bold;
+      white-space: nowrap;
+      width: 20%;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      .document-container {
+        box-shadow: none;
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="document-container">
+
+    <!-- HEADER -->
+    <header>
+      <h1>{{ test_plan.document.title }}</h1>
+      {% if test_plan.document.subtitle %}
+      <p style="font-size: 1.2rem; color: #7f8c8d;">{{ test_plan.document.subtitle }}</p>
+      {% endif %}
+    </header>
+
+    <!-- DOCUMENT CONTROL -->
+    <section>
+      <h3>Document Control</h3>
+      <table class="meta-table">
+        <tr>
+          <th>Document ID</th>
+          <td>{{ test_plan.document.document_control.document_id }}</td>
+        </tr>
+        <tr>
+          <th>Version</th>
+          <td>{{ test_plan.document.document_control.version }}</td>
+        </tr>
+        <tr>
+          <th>Date</th>
+          <td>{{ test_plan.document.document_control.date }}</td>
+        </tr>
+        <tr>
+          <th>Program</th>
+          <td>{{ test_plan.document.document_control.program }}</td>
+        </tr>
+        <tr>
+          <th>Classification</th>
+          <td>{{ test_plan.document.document_control.classification }}</td>
+        </tr>
+        <tr>
+          <th>Prepared by</th>
+          <td>{{ test_plan.document.document_control.prepared_by }}</td>
+        </tr>
+        <tr>
+          <th>Approval Authority</th>
+          <td>{{ test_plan.document.document_control.approval_authority }}</td>
+        </tr>
+      </table>
+
+      <!-- REVISION HISTORY -->
+      <h4>Revision History</h4>
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>Version</th>
+            <th>Date</th>
+            <th>Author</th>
+            <th>Changes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if test_plan.document.document_control.revision_history and
+          (test_plan.document.document_control.revision_history|length > 0) %}
+          {% for rev in test_plan.document.document_control.revision_history %}
+          <tr>
+            <td>{{ rev.version }}</td>
+            <td>{{ rev.date }}</td>
+            <td>{{ rev.author }}</td>
+            <td>{{ rev.changes }}</td>
+          </tr>
+          {% endfor %}
+          {% else %}
+          <tr>
+            <td>{{ test_plan.document.document_control.version }}</td>
+            <td>{{ test_plan.document.document_control.date }}</td>
+            <td>{{ test_plan.document.document_control.prepared_by }}</td>
+            <td>Initial release</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- DISTRIBUTION STATEMENT -->
+    <div class="distribution-stmt">
+      {{ test_plan.document.document_control.distribution_statement if
+      test_plan.document.document_control.distribution_statement else "Distribution Statement A: Approved for public
+      release; distribution is unlimited." }}
+    </div>
+
+    <!-- 1. SCOPE AND PURPOSE -->
+    <section>
+      <h2>1. Scope and Purpose</h2>
+      <p><strong>Purpose:</strong> {{ test_plan.scope_and_purpose.purpose }}</p>
+      <p><strong>Scope:</strong> {{ test_plan.scope_and_purpose.scope }}</p>
+
+      {% if test_plan.scope_and_purpose.limitations %}
+      <p><strong>Limitations:</strong> {{ test_plan.scope_and_purpose.limitations }}</p>
+      {% endif %}
+    </section>
+
+    <!-- 2. REFERENCED DOCUMENTS -->
+    <section>
+      <h2>2. Referenced Documents</h2>
+      <p>The following documents are referenced herein and form a part of this test plan to the extent specified.</p>
+
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th width="25%">Document ID</th>
+            <th>Title</th>
+            <th width="12%">Version</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if test_plan.referenced_documents and (test_plan.referenced_documents|length > 0) %}
+          {% for doc in test_plan.referenced_documents %}
+          <tr>
+            <td class="id-cell">{{ doc.document_id }}</td>
+            <td>{{ doc.title }}</td>
+            <td>{{ doc.version if doc.version else "—" }}</td>
+          </tr>
+          {% endfor %}
+          {% else %}
+          <tr>
+            <td class="id-cell">TBD</td>
+            <td>TBD</td>
+            <td>—</td>
+          </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 3. DEFINITIONS, ACRONYMS, AND ABBREVIATIONS -->
+    <section>
+      <h2>3. Definitions, Acronyms, and Abbreviations</h2>
+
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th width="25%">Term / Acronym</th>
+            <th>Definition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>DT</strong></td>
+            <td>Developmental Test — testing conducted to evaluate design maturity and technical performance.</td>
+          </tr>
+          <tr>
+            <td><strong>IRS</strong></td>
+            <td>Interface Requirements Specification — a document defining interface requirements between systems or
+              system elements.</td>
+          </tr>
+          <tr>
+            <td><strong>OT</strong></td>
+            <td>Operational Test — testing conducted to evaluate system effectiveness and suitability in an
+              operationally representative environment.</td>
+          </tr>
+          <tr>
+            <td><strong>RVTM</strong></td>
+            <td>Requirements Verification Traceability Matrix — a matrix linking requirements to their planned
+              verification activities and results.</td>
+          </tr>
+          <tr>
+            <td><strong>SUT</strong></td>
+            <td>System Under Test — the system or system element being evaluated during testing.</td>
+          </tr>
+          <tr>
+            <td><strong>T&amp;E</strong></td>
+            <td>Test and Evaluation — the process of planning, conducting, and assessing tests to provide information
+              about system capabilities and limitations.</td>
+          </tr>
+          <tr>
+            <td><strong>TAID</strong></td>
+            <td>Test, Analysis, Inspection, Demonstration — the four standard verification methods used to confirm
+              requirement compliance.</td>
+          </tr>
+          <tr>
+            <td><strong>TBD</strong></td>
+            <td>To Be Determined — content that has not yet been defined.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 4. TEST OBJECTIVES -->
+    <section>
+      <h2>4. Test Objectives</h2>
+
+      {% if test_plan.test_objectives and (test_plan.test_objectives|length > 0) %}
+      <ol>
+        {% for obj in test_plan.test_objectives %}
+        <li>{{ obj }}</li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p class="placeholder">TBD: Test objectives will be defined based on the interface requirements and intended
+        verification scope.</p>
+      {% endif %}
+    </section>
+
+    <!-- 5. TEST ITEMS -->
+    <section>
+      <h2>5. Test Items</h2>
+
+      {% if test_plan.test_items and (test_plan.test_items|length > 0) %}
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th width="25%">Test Item</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in test_plan.test_items %}
+          <tr>
+            <td class="id-cell">{{ item.name }}</td>
+            <td>{{ item.description }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="placeholder">TBD: Test items will be defined by the system, interface, and configuration under test.</p>
+      {% endif %}
+    </section>
+
+    <!-- 6. REQUIREMENTS UNDER TEST -->
+    <section>
+      <h2>6. Requirements Under Test</h2>
+
+      {% if test_plan.requirements_under_test and test_plan.requirements_under_test.categories %}
+      {% for cat in test_plan.requirements_under_test.categories %}
+      <h3>6.{{ loop.index }} {{ cat.name }}</h3>
+
+      {% if cat.requirements and (cat.requirements|length > 0) %}
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th width="20%">Requirement ID</th>
+            <th>Requirement Statement</th>
+            <th width="18%">Planned Verification Method</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for req in cat.requirements %}
+          <tr>
+            <td class="id-cell">{{ req.id }}</td>
+            <td>{{ req.statement }}</td>
+            <td>
+              {% if req.verification_method %}
+              {{ req.verification_method }}
+              {% else %}
+              TBD
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="placeholder">No requirements identified for this category.</p>
+      {% endif %}
+      {% endfor %}
+      {% else %}
+      <p class="placeholder">TBD: Requirements under test will be populated from the generated IRS and related
+        verification needs.</p>
+      {% endif %}
+    </section>
+
+    <!-- 7. TEST APPROACH -->
+    <section>
+      <h2>7. Test Approach</h2>
+
+      <p>
+        {% if test_plan.test_approach.overview %}
+        {{ test_plan.test_approach.overview }}
+        {% else %}
+        <span class="placeholder">TBD: The overall test approach will define how interface requirements are verified
+          through test, analysis, inspection, demonstration, or a combination thereof.</span>
+        {% endif %}
+      </p>
+
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>Approach Element</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Test Levels</td>
+            <td>{{ test_plan.test_approach.test_levels if test_plan.test_approach.test_levels else "TBD" }}</td>
+          </tr>
+          <tr>
+            <td>Test Methods</td>
+            <td>{{ test_plan.test_approach.test_methods if test_plan.test_approach.test_methods else "TBD" }}</td>
+          </tr>
+          <tr>
+            <td>Pass/Fail Basis</td>
+            <td>{{ test_plan.test_approach.pass_fail_basis if test_plan.test_approach.pass_fail_basis else "TBD" }}</td>
+          </tr>
+          <tr>
+            <td>Regression / Retest Strategy</td>
+            <td>{{ test_plan.test_approach.regression_strategy if test_plan.test_approach.regression_strategy else "TBD"
+              }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 8. TEST ENVIRONMENT -->
+    <section>
+      <h2>8. Test Environment</h2>
+
+      <div class="note-box">
+        Environment-specific details such as exact hardware models, bench configurations,
+        or organization-specific tools may remain TBD until program-level tailoring occurs.
+      </div>
+
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>Environment Element</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Test Location</td>
+            <td>{{ test_plan.test_environment.location if test_plan.test_environment.location else "TBD" }}</td>
+          </tr>
+          <tr>
+            <td>Simulation / Emulation Assets</td>
+            <td>{{ test_plan.test_environment.simulation_assets if test_plan.test_environment.simulation_assets else
+              "TBD" }}</td>
+          </tr>
+          <tr>
+            <td>Support Software / Tools</td>
+            <td>{{ test_plan.test_environment.software_tools if test_plan.test_environment.software_tools else "TBD" }}
+            </td>
+          </tr>
+          <tr>
+            <td>Test Equipment</td>
+            <td>{{ test_plan.test_environment.equipment if test_plan.test_environment.equipment else "TBD" }}</td>
+          </tr>
+          <tr>
+            <td>Data / Inputs Required</td>
+            <td>{{ test_plan.test_environment.data_requirements if test_plan.test_environment.data_requirements else
+              "TBD" }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 8.1 SECURITY CONSIDERATIONS -->
+      <h3>8.1 Security Considerations</h3>
+      <p>
+        {% if test_plan.test_environment.security_considerations %}
+        {{ test_plan.test_environment.security_considerations }}
+        {% else %}
+        <span class="placeholder">TBD: Security measures, handling requirements for classified or controlled
+          unclassified information (CUI), facility clearance requirements, and cybersecurity considerations applicable
+          to the test environment will be defined prior to test execution.</span>
+        {% endif %}
+      </p>
+
+      <!-- 8.2 CONFIGURATION MANAGEMENT -->
+      <h3>8.2 Configuration Management</h3>
+      <p>
+        {% if test_plan.test_environment.configuration_management %}
+        {{ test_plan.test_environment.configuration_management }}
+        {% else %}
+        <span class="placeholder">TBD: Configuration identification and control procedures for the System Under Test
+          (SUT) will be established prior to test execution. This includes documentation of software build identifiers,
+          hardware serial numbers, firmware versions, and test environment baselines.</span>
+        {% endif %}
+      </p>
+    </section>
+
+    <!-- 9. ENTRY, EXIT, SUSPENSION, AND RESUMPTION CRITERIA -->
+    <section>
+      <h2>9. Entry, Exit, Suspension, and Resumption Criteria</h2>
+
+      <h3>9.1 Entry Criteria</h3>
+      {% if test_plan.entry_exit_criteria.entry and (test_plan.entry_exit_criteria.entry|length > 0) %}
+      <ul>
+        {% for item in test_plan.entry_exit_criteria.entry %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="placeholder">TBD: Entry criteria will be defined prior to formal test execution.</p>
+      {% endif %}
+
+      <h3>9.2 Exit Criteria</h3>
+      {% if test_plan.entry_exit_criteria.exit and (test_plan.entry_exit_criteria.exit|length > 0) %}
+      <ul>
+        {% for item in test_plan.entry_exit_criteria.exit %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="placeholder">TBD: Exit criteria will be defined based on completion and disposition of planned
+        verification activities.</p>
+      {% endif %}
+
+      <h3>9.3 Suspension Criteria</h3>
+      {% if test_plan.entry_exit_criteria.suspension and (test_plan.entry_exit_criteria.suspension|length > 0) %}
+      <ul>
+        {% for item in test_plan.entry_exit_criteria.suspension %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="placeholder">TBD: Testing may be suspended if a critical defect is discovered that prevents further
+        meaningful test execution, a safety concern arises, or the test environment becomes unavailable or compromised.
+      </p>
+      {% endif %}
+
+      <h3>9.4 Resumption Criteria</h3>
+      {% if test_plan.entry_exit_criteria.resumption and (test_plan.entry_exit_criteria.resumption|length > 0) %}
+      <ul>
+        {% for item in test_plan.entry_exit_criteria.resumption %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="placeholder">TBD: Testing may resume once the condition that triggered suspension has been resolved,
+        verified, and documented, and the test environment has been restored to a known-good configuration.</p>
+      {% endif %}
+    </section>
+
+    <!-- 10. ROLES AND RESPONSIBILITIES -->
+    <section>
+      <h2>10. Roles and Responsibilities</h2>
+
+      {% if test_plan.roles_and_responsibilities and (test_plan.roles_and_responsibilities|length > 0) %}
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th width="28%">Role</th>
+            <th>Responsibility</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for role in test_plan.roles_and_responsibilities %}
+          <tr>
+            <td>{{ role.role }}</td>
+            <td>{{ role.responsibility }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="placeholder">TBD: Roles and responsibilities will be assigned by the program or test organization.</p>
+      {% endif %}
+    </section>
+
+    <!-- 11. SCHEDULE AND MILESTONES -->
+    <section>
+      <h2>11. Schedule and Milestones</h2>
+
+      {% if test_plan.schedule and (test_plan.schedule|length > 0) %}
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>Milestone</th>
+            <th>Planned Date / Window</th>
+            <th>Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in test_plan.schedule %}
+          <tr>
+            <td>{{ item.milestone }}</td>
+            <td>{{ item.date }}</td>
+            <td>{{ item.notes if item.notes else "" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="placeholder">TBD: Schedule and milestones will be defined by program planning constraints.</p>
+      {% endif %}
+    </section>
+
+    <!-- 12. RISKS AND ASSUMPTIONS -->
+    <section>
+      <h2>12. Risks and Assumptions</h2>
+
+      <h3>12.1 Risks</h3>
+      {% if test_plan.risks_and_assumptions.risks and (test_plan.risks_and_assumptions.risks|length > 0) %}
+      <ul>
+        {% for risk in test_plan.risks_and_assumptions.risks %}
+        <li>{{ risk }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="placeholder">TBD: Risks will be documented as the verification approach matures.</p>
+      {% endif %}
+
+      <h3>12.2 Assumptions</h3>
+      {% if test_plan.risks_and_assumptions.assumptions and (test_plan.risks_and_assumptions.assumptions|length > 0) %}
+      <ul>
+        {% for assumption in test_plan.risks_and_assumptions.assumptions %}
+        <li>{{ assumption }}</li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="placeholder">TBD: Assumptions will be refined based on the test environment and available resources.</p>
+      {% endif %}
+    </section>
+
+    <!-- 13. DEFECT / NON-CONFORMANCE MANAGEMENT -->
+    <section>
+      <h2>13. Defect / Non-Conformance Management</h2>
+
+      <p>
+        {% if test_plan.defect_management and test_plan.defect_management.process %}
+        {{ test_plan.defect_management.process }}
+        {% else %}
+        <span class="placeholder">TBD: The defect management process will define how test failures, anomalies, and
+          non-conformances are recorded, categorized, tracked, dispositioned, and closed. All defects shall be
+          documented with sufficient detail to enable root-cause analysis and corrective action.</span>
+        {% endif %}
+      </p>
+
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th>Element</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Tracking Tool</td>
+            <td>{{ test_plan.defect_management.tools if test_plan.defect_management is defined and
+              test_plan.defect_management.tools else "TBD" }}</td>
+          </tr>
+          <tr>
+            <td>Severity Levels</td>
+            <td>{{ test_plan.defect_management.severity_levels if test_plan.defect_management is defined and
+              test_plan.defect_management.severity_levels else "TBD (e.g., Critical, Major, Minor, Informational)" }}
+            </td>
+          </tr>
+          <tr>
+            <td>Disposition Authority</td>
+            <td>{{ test_plan.defect_management.disposition_authority if test_plan.defect_management is defined and
+              test_plan.defect_management.disposition_authority else "TBD" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 14. VERIFICATION METHOD DEFINITIONS AND TRACEABILITY MATRIX -->
+    <section>
+      <h2>14. Traceability Matrix</h2>
+
+      <!-- 14.1 VERIFICATION METHOD DEFINITIONS -->
+      <h3>14.1 Verification Method Definitions</h3>
+      <p>The following verification methods, consistent with standard systems engineering practice (INCOSE SE Handbook;
+        ISO/IEC/IEEE 15288), are used throughout this document and the traceability matrix below.</p>
+
+      <table class="std-table def-table">
+        <thead>
+          <tr>
+            <th width="20%">Method</th>
+            <th>Definition</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Test (T)</td>
+            <td>Operation of the system or component under controlled conditions to verify performance against specified
+              requirements. Inputs are provided and outputs are recorded and evaluated against predicted or expected
+              results.</td>
+          </tr>
+          <tr>
+            <td>Analysis (A)</td>
+            <td>Use of mathematical modeling, simulation, statistical evaluation, or other technical assessment methods
+              to verify compliance with requirements where physical testing alone is impractical or insufficient.</td>
+          </tr>
+          <tr>
+            <td>Inspection (I)</td>
+            <td>Visual examination or review of documentation, design artifacts, or physical hardware to verify
+              conformance with specified requirements without operating the system.</td>
+          </tr>
+          <tr>
+            <td>Demonstration (D)</td>
+            <td>Operation of the system to show qualitatively that a required capability exists. Demonstration relies on
+              observable functional performance rather than detailed quantitative measurement.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 14.2 REQUIREMENT-TO-TEST TRACEABILITY -->
+      <h3>14.2 Requirement-to-Test Traceability</h3>
+
+      {% if test_plan.traceability and (test_plan.traceability|length > 0) %}
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th width="18%">Requirement ID</th>
+            <th width="18%">Planned Test ID</th>
+            <th width="14%">Verification Method</th>
+            <th>Verification Objective</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in test_plan.traceability %}
+          <tr>
+            <td class="id-cell">{{ row.requirement_id }}</td>
+            <td class="id-cell">{{ row.test_id if row.test_id else "TBD" }}</td>
+            <td>{{ row.verification_method if row.verification_method else "TBD" }}</td>
+            <td>{{ row.objective if row.objective else "TBD" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <p class="placeholder">TBD: Traceability will be established between interface requirements and planned test
+        procedures.</p>
+      {% endif %}
+    </section>
+
+    <!-- 15. TEST DELIVERABLES AND REPORTING -->
+    <section>
+      <h2>15. Test Deliverables and Reporting</h2>
+
+      <p>The following deliverables shall be produced as part of the test and evaluation effort described in this plan.
+      </p>
+
+      {% if test_plan.test_deliverables and (test_plan.test_deliverables|length > 0) %}
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th width="28%">Deliverable</th>
+            <th>Description</th>
+            <th width="15%">Due</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for d in test_plan.test_deliverables %}
+          <tr>
+            <td>{{ d.deliverable }}</td>
+            <td>{{ d.description }}</td>
+            <td>{{ d.due if d.due else "TBD" }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <table class="std-table">
+        <thead>
+          <tr>
+            <th width="28%">Deliverable</th>
+            <th>Description</th>
+            <th width="15%">Due</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Test Plan</td>
+            <td>This document; defines the overall test strategy, scope, and schedule.</td>
+            <td>TBD</td>
+          </tr>
+          <tr>
+            <td>Test Procedures</td>
+            <td>Step-by-step procedures for executing each planned test case.</td>
+            <td>TBD</td>
+          </tr>
+          <tr>
+            <td>Test Report</td>
+            <td>Summary of test results, defects encountered, and verification status.</td>
+            <td>TBD</td>
+          </tr>
+          <tr>
+            <td>Updated RVTM</td>
+            <td>Requirements Verification Traceability Matrix updated with actual test results and verification status.
+            </td>
+            <td>TBD</td>
+          </tr>
+        </tbody>
+      </table>
+      {% endif %}
+    </section>
+
+    <!-- 16. NOTES AND CONSTRAINTS -->
+    <section>
+      <h2>16. Notes and Constraints</h2>
+
+      <ol>
+        {% if test_plan.notes_and_constraints and (test_plan.notes_and_constraints|length > 0) %}
+        {% for n in test_plan.notes_and_constraints %}
+        <li><strong>{{ n.title }}:</strong> {{ n.description }}</li>
+        {% endfor %}
+        {% else %}
+        <li><strong>TBD:</strong> Program-specific constraints and notes will be added during tailoring.</li>
+        {% endif %}
+      </ol>
+    </section>
+
+    <!-- APPROVALS -->
+    <section class="signature-block">
+      {% if test_plan.approvals and test_plan.approvals.signatories %}
+      {% for s in test_plan.approvals.signatories %}
+      <div class="sig-line">
+        {{ s.role }}<br />
+        __________________<br />
+        Date: __________
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="sig-line">
+        Systems Engineering Lead<br />
+        __________________<br />
+        Date: __________
+      </div>
+      <div class="sig-line">
+        Test Lead<br />
+        __________________<br />
+        Date: __________
+      </div>
+      {% endif %}
+    </section>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <p>{{ test_plan.footer.text }}</p>
+    </div>
+
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ irs.document.title }}{% if irs.document.subtitle %} - {{ irs.document.subtitle }}{% endif %}</title>
+
+  <style>
+    :root {
+      --primary-color: #2f4358;
+      --secondary-color: #31465c;
+      --accent-color: #4aa3df;
+      --text-color: #222;
+      --bg-color: #f4f5f7;
+      --paper-color: #ffffff;
+      --border-color: #d9dde2;
+      --muted-color: #6c7a89;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .document-container {
+      max-width: 850px;
+      margin: 0 auto;
+      background: var(--paper-color);
+      padding: 56px 60px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      border-radius: 4px;
+    }
+
+    header {
+      border-bottom: 2px solid var(--primary-color);
+      padding-bottom: 18px;
+      margin-bottom: 36px;
+      text-align: center;
+    }
+
+    h1 {
+      color: var(--primary-color);
+      font-size: 2rem;
+      margin: 0 0 8px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: var(--muted-color);
+      margin: 0;
+    }
+
+    /* Restore normal section styling */
+    h2 {
+      color: var(--secondary-color);
+      border-left: 4px solid var(--accent-color);
+      padding-left: 12px;
+      margin-top: 32px;
+      margin-bottom: 12px;
+      font-size: 1.4rem;
+      letter-spacing: 0;
+      white-space: normal;
+    }
+
+    h3 {
+      color: var(--secondary-color);
+      font-size: 1.1rem;
+      margin-top: 22px;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin: 10px 0 0 0;
+    }
+
+    .meta-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 28px;
+      font-size: 0.95rem;
+    }
+
+    .meta-table th,
+    .meta-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .meta-table th {
+      background-color: #3a4b5c;
+      color: white;
+      width: 30%;
+    }
+
+    /* Restore normal IRS table sizing */
+    .req-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 18px 0;
+      font-size: 0.92rem;
+      page-break-inside: auto;
+    }
+
+    .req-table th,
+    .req-table td {
+      border: 1px solid var(--border-color);
+      padding: 10px;
+      vertical-align: top;
+      word-wrap: break-word;
+    }
+
+    .req-table tr {
+      /* removed page-break-inside to fix empty pages */
+      page-break-after: auto;
+    }
+
+    .req-table th {
+      background-color: #eef2f5;
+      color: var(--secondary-color);
+    }
+
+    .req-id {
+      font-family: "Courier New", Courier, monospace;
+      font-weight: bold;
+      color: var(--accent-color);
+      word-break: break-word;
+    }
+
+    .diagram-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    .diagram-table td {
+      border: 1px solid var(--border-color);
+      padding: 15px;
+      text-align: center;
+    }
+
+    .diagram-table caption {
+      caption-side: top;
+      text-align: center;
+      font-style: italic;
+      padding: 8px;
+      color: var(--secondary-color);
+    }
+
+    svg {
+      width: 100% !important;
+      height: auto !important;
+      max-width: 100%;
+    }
+
+    .footer {
+      margin-top: 56px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      color: #7f8c8d;
+      text-align: center;
+    }
+
+    .signature-block {
+      margin-top: 48px;
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .sig-line {
+      border-top: 1px solid #333;
+      width: 45%;
+      padding-top: 5px;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+
+    /* RVTM ONLY */
+    @page rvtm_page {
+      size: A4 landscape;
+      margin: 1in;
+    }
+
+    .rvtm-section {
+      page: rvtm_page;
+      page-break-before: always;
+    }
+
+    .rvtm-section h2 {
+      font-size: 1.15rem;
+      word-break: break-word;
+      margin-top: 0;
+      margin-bottom: 10px;
+    }
+
+    .rvtm-section .req-table {
+      font-size: 10px;
+      margin: 12px 0;
+    }
+
+    .rvtm-section .req-table th,
+    .rvtm-section .req-table td {
+      padding: 6px;
+    }
+
+    @media print {
+      body {
+        background: white;
+        padding: 0;
+      }
+
+      .document-container {
+        box-shadow: none;
+        padding: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="document-container">
+
+    <!-- HEADER -->
+    <header>
+      <h1>{{ irs.document.title }}</h1>
+      {% if irs.document.subtitle %}
+        <p class="subtitle">{{ irs.document.subtitle }}</p>
+      {% endif %}
+    </header>
+
+    <!-- DOCUMENT CONTROL -->
+    <section>
+      <h3>Document Control</h3>
+      <table class="meta-table">
+        <tr>
+          <th>Document ID</th>
+          <td>{{ irs.document.document_control.document_id }}</td>
+        </tr>
+        <tr>
+          <th>Version</th>
+          <td>{{ irs.document.document_control.version }}</td>
+        </tr>
+        <tr>
+          <th>Date</th>
+          <td>{{ irs.document.document_control.date }}</td>
+        </tr>
+        <tr>
+          <th>Program</th>
+          <td>{{ irs.document.document_control.program }}</td>
+        </tr>
+        <tr>
+          <th>Prepared by</th>
+          <td>{{ irs.document.document_control.prepared_by }}</td>
+        </tr>
+        <tr>
+          <th>Approval Authority</th>
+          <td>{{ irs.document.document_control.approval_authority }}</td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- 1. INTRODUCTION -->
+    <section>
+      <h2>1. Introduction</h2>
+
+      <h3>1.1 Purpose</h3>
+      <p>{{ irs.scope_and_purpose.purpose }}</p>
+
+      <h3>1.2 Scope</h3>
+      <p>{{ irs.scope_and_purpose.scope }}</p>
+    </section>
+
+    <!-- 2. SYSTEM ARCHITECTURE DIAGRAM -->
+    {% if irs.sab_diagram %}
+    <section>
+      <h2>2. System Architecture Diagram</h2>
+      <p>
+        The System Architecture Blank (SAB) diagram shown below provides the architectural
+        context from which the external functional exchanges were derived. These exchanges
+        form the basis of the interface requirements defined in this document.
+      </p>
+
+      <table class="diagram-table">
+        <caption>Figure 1 — {{ irs.sab_diagram.name }}</caption>
+        <tr>
+          <td>
+            {{ irs.sab_diagram.render("svg") | safe }}
+          </td>
+        </tr>
+      </table>
+    </section>
+    {% endif %}
+
+    <!-- 3. INTERFACE IDENTIFICATION -->
+    <section>
+      <h2>3. Interface Identification</h2>
+
+      <table class="req-table">
+        <thead>
+          <tr>
+            <th>Interface ID</th>
+            <th>Source System</th>
+            <th>Destination System</th>
+            <th>Interface Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="req-id">{{ irs.interface_identification.interface_id }}</td>
+            <td>{{ irs.interface_identification.source_system }}</td>
+            <td>{{ irs.interface_identification.destination_system }}</td>
+            <td>{{ irs.interface_identification.interface_type }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        <strong>Boundary Description:</strong>
+        {{ irs.interface_identification.boundary_description }}
+      </p>
+    </section>
+
+    <!-- 4. INTERFACE REQUIREMENTS -->
+    <section>
+      <h2>4. Interface Requirements</h2>
+
+      {% if irs.interface_requirements and irs.interface_requirements.categories %}
+        {% for cat in irs.interface_requirements.categories %}
+          <h3>4.{{ loop.index }} {{ cat.name }}</h3>
+
+          {% if cat.requirements and (cat.requirements|length > 0) %}
+            <table class="req-table">
+              <thead>
+                <tr>
+                  <th width="20%">Requirement ID</th>
+                  <th>Requirement Statement</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for req in cat.requirements %}
+                  <tr>
+                    <td class="req-id">{{ req.id }}</td>
+                    <td>{{ req.statement }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <table class="req-table">
+              <tbody>
+                <tr>
+                  <td class="req-id">TBD</td>
+                  <td>TBD</td>
+                </tr>
+              </tbody>
+            </table>
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        <table class="req-table">
+          <tbody>
+            <tr>
+              <td class="req-id">TBD</td>
+              <td>TBD</td>
+            </tr>
+          </tbody>
+        </table>
+      {% endif %}
+    </section>
+
+    <!-- 5. RVTM -->
+    <section class="rvtm-section">
+      <h2>5. Requirements Verification Traceability Matrix</h2>
+
+      <table class="req-table">
+        <thead>
+          <tr>
+            <th width="16%">Requirement ID</th>
+            <th width="34%">Requirement Statement</th>
+            <th width="12%">Verification Method</th>
+            <th width="14%">Verification Artifact</th>
+            <th width="16%">Success Criteria</th>
+            <th width="8%">Status</th>
+            <th width="10%">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if irs.rvtm and (irs.rvtm|length > 0) %}
+            {% for row in irs.rvtm %}
+              <tr>
+                <td class="req-id">{{ row.requirement_id }}</td>
+                <td>{{ row.requirement_statement }}</td>
+                <td>{{ row.verification_method }}</td>
+                <td>{{ row.verification_artifact }}</td>
+                <td>{{ row.success_criteria }}</td>
+                <td>{{ row.status if row.status else "" }}</td>
+                <td>{{ row.notes if row.notes else "" }}</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td class="req-id">TBD</td>
+              <td>TBD</td>
+              <td>TBD</td>
+              <td>TBD</td>
+              <td>TBD</td>
+              <td></td>
+              <td></td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </section>
+
+    <!-- 6. NOTES AND CONSTRAINTS -->
+    <section>
+      <h2>6. Notes and Constraints</h2>
+
+      <ol>
+        {% if irs.notes_and_constraints and (irs.notes_and_constraints|length > 0) %}
+          {% for n in irs.notes_and_constraints %}
+            <li>
+              <strong>{{ n.title }}:</strong> {{ n.description }}
+            </li>
+          {% endfor %}
+        {% else %}
+          <li><strong>TBD:</strong> TBD</li>
+        {% endif %}
+      </ol>
+    </section>
+
+    <!-- SIGNATURES / APPROVALS -->
+    <section class="signature-block">
+      {% if irs.approvals and irs.approvals.signatories %}
+        {% for s in irs.approvals.signatories %}
+          <div class="sig-line">
+            {{ s.role }}<br />
+            __________________<br />
+            Date: __________
+          </div>
+        {% endfor %}
+      {% else %}
+        <div class="sig-line">
+          Systems Engineering Lead<br />
+          __________________<br />
+          Date: __________
+        </div>
+        <div class="sig-line">
+          Program Manager<br />
+          __________________<br />
+          Date: __________
+        </div>
+      {% endif %}
+    </section>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <p>{{ irs.footer.text }}</p>
+    </div>
+
+  </div>
+</body>
+</html>
